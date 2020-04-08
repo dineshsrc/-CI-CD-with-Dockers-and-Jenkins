@@ -1,14 +1,15 @@
 def CONTAINER_NAME="jenkins-pipeline"
 def CONTAINER_TAG="latest"
-def DOCKER_HUB_USER="XYZ"
+def DOCKER_HUB_USER="digitizedpost"
 def HTTP_PORT="8090"
 
 node {
 
     stage('Initialize'){
-        def dockerHome = tool 'myDocker'
-        def mavenHome  = tool 'myMaven'
-        env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
+        def dockerHome = tool 'LocalDOCKER'
+        def mavenHome  = tool 'LocalMAVEN'
+        def gitUserHome = 'C:/Program Files/Git/usr/bin'
+        env.PATH = "C:\\Program Files\\Git\\usr\\bin;C:\\Program Files\\Git\\bin;${dockerHome}:${mavenHome}/bin:${env.PATH}"
     }
 
     stage('Checkout') {
@@ -36,7 +37,7 @@ node {
     }
 
     stage('Push to Docker Registry'){
-        withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        withCredentials([usernamePassword(credentialsId: '390e87c3-bf43-46b4-a0c0-c0131c491f8f', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
         }
     }
